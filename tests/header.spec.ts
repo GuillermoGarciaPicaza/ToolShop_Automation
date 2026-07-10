@@ -3,7 +3,7 @@ import { Header } from '../components/Header';
 
 test.describe('Header tests', () => {
 
-  test('The ToolShop icon is visible in the Header', async ({ page }) => {
+  test('All Header elements are visible', async ({ page }) => {
     const header = new Header(page);
     await page.goto('https://practicesoftwaretesting.com');
     
@@ -38,7 +38,5 @@ test.describe('Header tests', () => {
   });
 
   //test('Cart badge updates after adding a product');
-
-  //test('Cart icon is visible');
 
 });

@@ -5,16 +5,18 @@ export class HomePage {
   //create objects to important elements of the page
   readonly page: Page;
   readonly header: Header;
+  readonly sliderMin: Locator;
+  readonly sliderMax: Locator;
   readonly searchInput: Locator;
   readonly productCards: Locator;
-  readonly categoryFilters: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.header = new Header(page);
+    this.sliderMin = page.getByRole('slider', { name: 'ngx-slider', exact: true });
+    this.sliderMax = page.getByRole('slider', { name: 'ngx-slider-max' })
     this.searchInput = page.getByPlaceholder('Search');
     this.productCards = page.locator('[data-test="product-card"]');
-    this.categoryFilters = page.locator('.checkbox');
   }
 
   async goto() {
@@ -29,7 +31,19 @@ export class HomePage {
     await this.page.getByText(productName).click();
   }
 
-  async filterByCategory(category: string) {
-    await this.page.getByLabel(category).check();
+  async checkFilter(label: string) {
+    await this.page.locator(`label:has-text("${label}")`).click();
+  }
+
+  async getProducts() {
+    const cards = await this.productCards.all();
+    const products = [];
+
+    for (const card of cards) {
+      const tags = await card.locator('.product-tags span').allTextContents();
+      products.push({ tags });
+    }
+
+    return products;
   }
 }
